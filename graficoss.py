@@ -46,6 +46,7 @@ def graficar_promedio_categoria(df):
     avg_sale_price = df.groupby('category')['sale_price'].mean().sort_values(ascending=False)
     plt.figure(figsize=(10, 6))
     avg_sale_price.plot(kind='bar', color='salmon')
+    plt.yscale('log')  # Esto ajusta el eje Y a una escala logarítmica
     plt.title('Promedio de Precio de Venta por Categoría', fontsize=14)
     plt.xlabel('Categoría', fontsize=12)
     plt.ylabel('Promedio de Precio de Venta (USD)', fontsize=12)
