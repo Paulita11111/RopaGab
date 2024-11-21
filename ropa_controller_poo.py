@@ -5,7 +5,7 @@ from clase_ropa import Prenda
 def insert_prenda(indexer, product, category, sub_category, brand, sale_price, market_price, typec, rating, description):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO prendas (indexer, product, category, sub_category, brand, sale_price, market_price, typec, rating, description) \
+    statement = "INSERT INTO product_catalog (indexer, product, category, sub_category, brand, sale_price, market_price, typec, rating, description) \
     VALUES ( ?, ?, ?, ? ,?, ?, ?, ?, ?, ?)"
     cursor.execute(statement, [indexer, product, category, sub_category, brand, sale_price, market_price, typec, rating, description])
     db.commit()
@@ -14,7 +14,7 @@ def insert_prenda(indexer, product, category, sub_category, brand, sale_price, m
 def update_prenda(indexer, product, category, sub_category, brand, sale_price, market_price, typec, rating, description):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE prendas SET product= ?, category= ?, sub_category= ?, brand= ?, sale_price= ?, market_price= ?,typec= ?, \
+    statement = "UPDATE product_catalog SET product= ?, category= ?, sub_category= ?, brand= ?, sale_price= ?, market_price= ?,typec= ?, \
     rating= ?, description= ? WHERE indexer= ?"
     cursor.execute(statement, [product, category, sub_category, brand, sale_price, market_price, typec, rating, description, indexer])
     db.commit()
@@ -24,7 +24,7 @@ def update_prenda(indexer, product, category, sub_category, brand, sale_price, m
 def delete_prenda(indexer):
     db = get_db()
     cursor = db.cursor()
-    statement = "DELETE FROM prendas WHERE indexer = ?"
+    statement = "DELETE FROM product_catalog WHERE indexer = ?"
     cursor.execute(statement, [indexer])
     db.commit()
     return True
@@ -34,7 +34,7 @@ def get_by_id(indexer):
     db = get_db()
     cursor = db.cursor()
     statement = "SELECT indexer, product, category, sub_category, brand, sale_price, market_price, typec, rating, \
-    description FROM prendas WHERE indexer = ?"
+    description FROM product_catalog WHERE indexer = ?"
     cursor.execute(statement, [indexer])
     single_prenda = cursor.fetchone()
     indexer= single_prenda[0]
