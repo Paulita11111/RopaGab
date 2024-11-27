@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from db_ropa import get_db
 
 # Conexión con la base de datos
@@ -18,49 +19,49 @@ def obtener_datos():
     conn.close()
     return df
 
-# Graficar precio de venta
-def graficar_precio_venta(df):
-    plt.figure(figsize=(10, 6))
-    df_sorted = df[['product', 'sale_price']].sort_values(by='sale_price', ascending=False)
-    plt.bar(df_sorted['product'], df_sorted['sale_price'], color='teal')
-    plt.title('Precio de Venta por Producto', fontsize=14)
-    plt.xlabel('Producto', fontsize=12)
-    plt.ylabel('Precio de Venta (USD)', fontsize=12)
+# Distribución del precio de venta por categoría
+def distribucion_precio_categoria(df):
+    sns.boxplot(data=df, x='category', y='sale_price')
+    plt.title('Distribución del Precio de Venta por Categoría')
+    plt.xlabel('Categoría')
+    plt.ylabel('Precio de Venta (USD)')
     plt.xticks(rotation=90)
-    plt.tight_layout()
+    plt.show()    
+
+
+# Grafico de torta: proporción de productos por categoría
+def graficar_proporcion_categoria(df):
+    category_counts = df['category'].value_counts()  # Contar productos por categoría
+    plt.figure(figsize=(8, 8))
+    plt.pie(
+        category_counts,
+        labels=category_counts.index,
+        autopct='%1.1f%%',
+        startangle=90,
+        colors=plt.cm.Paired.colors  # Colores agradables
+    )
+    plt.title('Proporción de Productos por Categoría', fontsize=14)
     plt.show()
 
-# Graficar precio de venta vs. precio de mercado
-def graficar_precio_venta_vs_mercado(df):
-    plt.figure(figsize=(8, 5))
-    plt.scatter(df['sale_price'], df['market_price'], color='orange')
-    plt.title('Precio de Venta vs. Precio de Mercado', fontsize=14)
-    plt.xlabel('Precio de Venta (USD)', fontsize=12)
-    plt.ylabel('Precio de Mercado (USD)', fontsize=12)
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-
-# Graficar promedio de precio por categoría
-def graficar_promedio_categoria(df):
-    avg_sale_price = df.groupby('category')['sale_price'].mean().sort_values(ascending=False)
+# Gráfico de Barras: Promedio de Rating por Categoría
+def promedio_rating_categoria(df):
     plt.figure(figsize=(10, 6))
-    avg_sale_price.plot(kind='bar', color='salmon')
-    plt.yscale('log')  # Esto ajusta el eje Y a una escala logarítmica
-    plt.title('Promedio de Precio de Venta por Categoría', fontsize=14)
+    df.groupby('category')['rating'].mean().sort_values(ascending=False).plot(kind='bar', color='skyblue')
+    plt.title('Promedio de Rating por Categoría', fontsize=14)
     plt.xlabel('Categoría', fontsize=12)
-    plt.ylabel('Promedio de Precio de Venta (USD)', fontsize=12)
-    plt.xticks(rotation=45)
+    plt.ylabel('Rating Promedio', fontsize=12)
+    plt.xticks(rotation=90)
     plt.tight_layout()
     plt.show()
 
 # Función para generar todos los gráficos
 def generar_graficos():
     df = obtener_datos()  # Obtener los datos desde la base de datos
-    graficar_precio_venta(df)
-    graficar_precio_venta_vs_mercado(df)
-    graficar_promedio_categoria(df)
+    distribucion_precio_categoria(df)
+    graficar_proporcion_categoria(df)
+    promedio_rating_categoria(df)
 
 # Llamar la función para generar los gráficos
 if __name__ == '__main__':
     generar_graficos()
+
