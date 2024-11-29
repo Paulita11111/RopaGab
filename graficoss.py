@@ -1,12 +1,12 @@
-import sqlite3
+import sqlite3 #para conectar con la base de datos
 import pandas as pd
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt #para graficos
 import seaborn as sns
 from db_ropa import get_db
 
 # Conexión con la base de datos
 def get_db():
-    conn = sqlite3.connect('ropa.db')
+    conn = sqlite3.connect('ropa.db') #conectar a 'ropa.db'
     conn.row_factory = sqlite3.Row  # Devuelve resultados como diccionarios
     return conn
 
@@ -15,7 +15,7 @@ def obtener_datos():
     # Obtén los datos de la base de datos
     query = "SELECT product, category, sale_price, market_price, rating FROM product_catalog"
     conn = get_db()
-    df = pd.read_sql(query, conn)
+    df = pd.read_sql(query, conn) #lee los datos y los carga en el dataframe
     conn.close()
     return df
 
@@ -34,8 +34,8 @@ def graficar_proporcion_categoria(df):
     category_counts = df['category'].value_counts()  # Contar productos por categoría
     plt.figure(figsize=(8, 8))
     plt.pie(
-        category_counts,
-        labels=category_counts.index,
+        category_counts, #datos
+        labels=category_counts.index, #etiquetas
         autopct='%1.1f%%',
         startangle=90,
         colors=plt.cm.Paired.colors  # Colores agradables
@@ -63,5 +63,4 @@ def generar_graficos():
 
 # Llamar la función para generar los gráficos
 if __name__ == '__main__':
-    generar_graficos()
-
+    generar_graficos() #llamo a la funcion para generar los graficos
